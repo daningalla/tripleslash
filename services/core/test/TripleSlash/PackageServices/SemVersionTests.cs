@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Shouldly;
-using Tripleslash.Core;
+using Tripleslash.PackageServices;
 using Xunit;
 
-namespace TripleSlash.Core;
+namespace TripleSlash.PackageServices;
 
 public class SemVersionTests
 {

@@ -1,4 +1,4 @@
-﻿namespace Tripleslash.Core;
+﻿namespace Tripleslash.PackageServices;
 
 /// <summary>
 /// Represents a basic package identifier.

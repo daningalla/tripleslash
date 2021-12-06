@@ -15,9 +15,9 @@
 
 using System.Text.RegularExpressions;
 using Dawn;
-using TripleSlash.Core;
+using Tripleslash.Infrastructure;
 
-namespace Tripleslash.Core;
+namespace Tripleslash.PackageServices;
 
 /// <summary>
 /// Represents a semver 2.0 value.
@@ -167,10 +167,20 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
     /// <exception cref="FormatException"><paramref name="s"/> is not a valid semantic version string.</exception>
     public static SemVersion Parse(string s)
     {
+        Guard.Argument(s, nameof(s)).NotNull().NotWhiteSpace();
+        
         return TryParse(s, out var semver)
             ? semver!
             : throw new FormatException($"Invalid semver string '{s}' (see https://semver.org/)");
     }
+
+    /// <summary>
+    /// Implicitly converts a string to semantic version.
+    /// </summary>
+    /// <param name="s">String to parse</param>
+    /// <returns><see cref="SemVersion"/></returns>
+    /// <exception cref="FormatException"><paramref name="s"/> is not a valid semantic version string.</exception>
+    public static implicit operator SemVersion(string s) => Parse(s);
 
     /// <summary>
     /// Attempts to parse a version string.

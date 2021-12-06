@@ -15,7 +15,7 @@
 
 using Dawn;
 
-namespace Tripleslash.Core;
+namespace Tripleslash.Infrastructure;
 
 public static class PartitionIteratorExtensions
 {

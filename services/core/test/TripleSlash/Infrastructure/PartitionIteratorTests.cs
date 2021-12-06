@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Shouldly;
-using Tripleslash.Core;
+using Tripleslash.Infrastructure;
 using Xunit;
 
-namespace TripleSlash.Core;
+namespace TripleSlash.Infrastructure;
 
 public class PartitionIteratorTests
 {

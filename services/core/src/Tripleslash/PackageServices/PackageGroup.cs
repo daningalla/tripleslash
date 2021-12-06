@@ -15,7 +15,7 @@
 
 using Dawn;
 
-namespace Tripleslash.Core;
+namespace Tripleslash.PackageServices;
 
 /// <summary>
 /// Represents a generic collection for a group of package dependencies.

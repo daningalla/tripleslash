@@ -13,28 +13,28 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace Tripleslash.Core;
+namespace Tripleslash.Infrastructure;
 
 /// <summary>
 /// Represents an iterator that efficiently splits arrays of <typeparamref name="T"/>
 /// elements without allocating additional heap objects (like string.Split())
 /// </summary>
 /// <typeparam name="T">The array element type.</typeparam>
-public ref struct PartitionIterator<T>
+public ref struct MultiSplitPartitionIterator<T>
 {
     private readonly ReadOnlySpan<T> _span;
-    private readonly T _splitValue;
+    private readonly T[] _splitValues;
     private readonly IEqualityComparer<T> _equalityComparer;
     private int _position;
 
-    internal PartitionIterator(ReadOnlySpan<T> span
-        , T splitValue
+    internal MultiSplitPartitionIterator(ReadOnlySpan<T> span
+        , T[] splitValues
         , IEqualityComparer<T>? equalityComparer = null)
     {
         Current = ReadOnlySpan<T>.Empty;
 
         _span = span;
-        _splitValue = splitValue;
+        _splitValues = splitValues;
         _equalityComparer = equalityComparer ?? EqualityComparer<T>.Default;
         _position = -1;
     }
@@ -55,7 +55,7 @@ public ref struct PartitionIterator<T>
 
         for (; _position < _span.Length; _position++)
         {
-            if (!_equalityComparer.Equals(_span[_position], _splitValue))
+            if (!IsAnyMatchToValues(_span[_position]))
                 continue;
 
             Current = _span[marker.._position];
@@ -63,8 +63,19 @@ public ref struct PartitionIterator<T>
         }
 
         Current = marker < _span.Length ? _span[marker..] : ReadOnlySpan<T>.Empty;
-        
+
         return !Current.IsEmpty;
+    } 
+
+    private bool IsAnyMatchToValues(T e)
+    {
+        for (var c = 0; c < _splitValues.Length; c++)
+        {
+            if (_equalityComparer.Equals(_splitValues[c], e))
+                return true;
+        }
+
+        return false;
     }
 
     /// <inheritdoc />

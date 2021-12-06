@@ -13,38 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-using Dawn;
-
-namespace Tripleslash.Core;
+namespace Tripleslash.PackageServices;
 
 /// <summary>
-/// Represents a version bound constraint.
+/// Defines constraints of a dependency version.
 /// </summary>
-public class VersionConstraint
+public enum BoundsConstraint
 {
     /// <summary>
-    /// Creates a new instance of this type.
+    /// Indicates version must be an exact match.
     /// </summary>
-    /// <param name="version">Version of the bounds</param>
-    /// <param name="boundsConstraint">Bounds constraint type</param>
-    public VersionConstraint(SemVersion version, BoundsConstraint boundsConstraint)
-    {
-        Guard.Argument(version, nameof(version)).NotNull();
-        
-        Version = version;
-        BoundsConstraint = boundsConstraint;
-    }
-
+    ExactMatch,
+    
     /// <summary>
-    /// Gets the version.
+    /// Indicates a version is inclusive in a range.
     /// </summary>
-    public SemVersion Version { get; }
-
+    Inclusive,
+    
     /// <summary>
-    /// Gets the bounds constraint.
+    /// Indicates a version is exclusive in a range.
     /// </summary>
-    public BoundsConstraint BoundsConstraint { get; }
-
-    /// <inheritdoc />
-    public override string ToString() => $"{BoundsConstraint}:{Version}";
+    Exclusive
 }

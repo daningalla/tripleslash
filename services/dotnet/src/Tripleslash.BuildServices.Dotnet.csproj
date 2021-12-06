@@ -11,4 +11,8 @@
     <ProjectReference Include="..\..\core\src\Tripleslash.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Tripleslash\BuildServices\Dotnet" />
+  </ItemGroup>
+
 </Project>

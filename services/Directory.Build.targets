@@ -1,0 +1,16 @@
+<Project>
+    <ItemGroup>
+        <PackageReference Update="Dawn.Guard" Version="1.12.0" />
+        <PackageReference Update="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Logging.Abstractions" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Logging" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Options" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Configuration" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Configuration.Json" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Configuration.Binder" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Configuration.EnvironmentVariables" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.ObjectPool" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Caching.Abstractions" Version="6.0.0" />
+        <PackageReference Update="Microsoft.Extensions.Caching.Memory" Version="6.0.0" />
+    </ItemGroup>
+</Project>

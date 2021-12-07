@@ -15,9 +15,19 @@
 
 namespace Tripleslash.Infrastructure;
 
-public static class StringUtilities
+public static class StringExtensions
 {
     public static string? NullIfEmpty(string? s) => string.IsNullOrEmpty(s) ? null : s;
 
     public static string? NullIfWhitespace(string? s) => string.IsNullOrWhiteSpace(s) ? null : s;
+
+    /// <summary>
+    /// Gets whether a string is equal without regard to case
+    /// </summary>
+    /// <param name="str">String to compare</param>
+    /// <param name="other">String to compare</param>
+    /// <returns></returns>
+    public static bool EqualsIgnoreCase(this string str, string other) => string.Compare(str
+        , other
+        , StringComparison.OrdinalIgnoreCase) == 0;
 }

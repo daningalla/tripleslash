@@ -18,31 +18,21 @@ namespace Tripleslash.PackageServices;
 /// <summary>
 /// Defines the interface of service that exposes package searching functionality.
 /// </summary>
-public interface IPackageSearchService
+public interface IPackageSearchService : IPackageService
 {
-    /// <summary>
-    /// Determines whether a particular ecosystem is supported.
-    /// </summary>
-    /// <param name="ecosystem">Ecosystem</param>
-    /// <returns><c>true</c> if the service supports searches for the given ecosystem.</returns>
-    bool SupportsEcosystem(string ecosystem);
-    
-    /// <summary>
-    /// Gets a source identifier (e.g. nuget.org)
-    /// </summary>
-    string SourceId { get; }
-
     /// <summary>
     /// When implemented by a class, executes an asynchronous search operation on
     /// the given keyword.
     /// </summary>
     /// <param name="searchTerm">The search term</param>
+    /// <param name="includePreRelease">Whether to include pre-release packages in search results</param>
     /// <param name="skip">The number of search results to skip</param>
     /// <param name="take">The maximum number of search results to return</param>
     /// <param name="cancellationToken">A token that can be observed for cancellation requests</param>
     /// <returns>A task that completes with search results</returns>
     Task<IEnumerable<PackageMetadata>> Search(
         string searchTerm
+        , bool includePreRelease
         , int skip
         , int take
         , CancellationToken cancellationToken);

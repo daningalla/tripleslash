@@ -203,8 +203,8 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
         semver = new(byte.Parse(match.Groups["major"].Value)
             , uint.Parse(match.Groups["minor"].Value)
             , uint.Parse(match.Groups["patch"].Value)
-            , StringUtilities.NullIfWhitespace(match.Groups["pre"].Value)
-            , StringUtilities.NullIfWhitespace(match.Groups["build"].Value));
+            , StringExtensions.NullIfWhitespace(match.Groups["pre"].Value)
+            , StringExtensions.NullIfWhitespace(match.Groups["build"].Value));
 
         return true;
     }

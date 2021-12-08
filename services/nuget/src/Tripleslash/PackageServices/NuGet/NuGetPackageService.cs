@@ -14,21 +14,39 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using Dawn;
+using Microsoft.Extensions.Logging;
 using Tripleslash.Infrastructure;
 
 namespace Tripleslash.PackageServices.NuGet;
 
 public class NuGetPackageService : IPackageSearchService
 {
+    private readonly ILogger<NuGetPackageService>? _logger;
+    private readonly ResourceFactory _resourceFactory;
+
     /// <summary>
     /// Creates a new instance.
     /// </summary>
-    public NuGetPackageService(NuGetOptions options)
+    public NuGetPackageService(
+        string key,
+        NuGetOptions options,
+        HttpClient httpClient,
+        ILoggerFactory? loggerFactory = null)
     {
+        Guard.Argument(key, nameof(key)).NotNull().NotWhiteSpace();
         Guard.Argument(options, nameof(options)).NotNull();
+        Guard.Argument(httpClient, nameof(httpClient)).NotNull();
+
+        _logger = loggerFactory?.CreateLogger<NuGetPackageService>();
+        _resourceFactory = new ResourceFactory(key, options, httpClient, loggerFactory);
         
-        SourceId = options.SourceId ?? throw new InvalidOperationException("Invalid source id");
+        SourceId = options.SourceId!;
         Description = options.Description ?? "NuGet service provider";
+
+        if (string.IsNullOrWhiteSpace(SourceId))
+        {
+            throw new InvalidOperationException("Invalid source id");
+        }
     }   
     
     /// <inheritdoc />
@@ -50,4 +68,7 @@ public class NuGetPackageService : IPackageSearchService
     {
         throw new NotImplementedException();
     }
+
+    /// <inheritdoc />
+    public override string ToString() => $"NuGet service provider \"{SourceId}\"";
 }

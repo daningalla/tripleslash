@@ -27,6 +27,7 @@ public class ResourceFactory
     private readonly NuGetOptions _options;
     private readonly HttpClient _httpClient;
     private readonly ILoggerFactory? _loggerFactory;
+    private readonly IndexResource _indexResource;
 
     internal ResourceFactory(string key, 
         NuGetOptions options,
@@ -37,9 +38,33 @@ public class ResourceFactory
         _options = options;
         _httpClient = httpClient;
         _loggerFactory = loggerFactory;
-
-        Index = new IndexResource(_key, options, httpClient, _loggerFactory?.CreateLogger<IndexResource>());
+        _indexResource = new IndexResource(key, 
+            options, 
+            httpClient, 
+            loggerFactory?.CreateLogger<IndexResource>());
     }
 
-    internal IndexResource Index { get; }
+    /// <summary>
+    /// Acquires the search resource.
+    /// </summary>
+    /// <returns><see cref="ISearchResource"/></returns>
+    /// <exception cref="NotImplementedException">A search resource was not found in the service index.</exception>
+    public async Task<ISearchResource> GetSearchResourceAsync()
+    {
+        var serviceIndex = await _indexResource.GetResourceAsync();
+        
+        var searchQueryEntry = serviceIndex
+            .Resources
+            .FirstOrDefault(svc => 
+                serviceIndex.Version == "3.0.0"
+                && svc.Type == "SearchQueryService");
+
+        if (searchQueryEntry == null)
+        {
+            var message = $"Search functionality is not currently available (type={typeof(NuGetPackageService)}, provider={_key}))";
+            throw new NotImplementedException(message);
+        }
+
+        return new SearchResource(_httpClient, searchQueryEntry.ResourceId, _loggerFactory?.CreateLogger<SearchResource>());
+    }
 }

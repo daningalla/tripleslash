@@ -30,7 +30,7 @@ public interface IPackageSearchService : IPackageService
     /// <param name="take">The maximum number of search results to return</param>
     /// <param name="cancellationToken">A token that can be observed for cancellation requests</param>
     /// <returns>A task that completes with search results</returns>
-    Task<IEnumerable<PackageMetadata>> Search(
+    Task<IEnumerable<PackageMetadata>> SearchAsync(
         string searchTerm
         , bool includePreRelease
         , int skip

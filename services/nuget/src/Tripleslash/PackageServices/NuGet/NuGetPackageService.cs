@@ -59,7 +59,7 @@ public class NuGetPackageService : IPackageSearchService
     public string Description { get; }
 
     /// <inheritdoc />
-    public Task<IEnumerable<PackageMetadata>> Search(
+    public Task<IEnumerable<PackageMetadata>> SearchAsync(
         string searchTerm
         , bool includePreRelease
         , int skip

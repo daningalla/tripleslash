@@ -25,13 +25,13 @@ namespace Tripleslash.PackageServices.NuGet;
 /// <summary>
 /// Represents the index resource
 /// </summary>
-internal class IndexResource
+public class IndexResource
 {
     private readonly string _serviceKey;
     private readonly ILogger? _logger;
     private readonly NuGetOptions _options;
     private readonly HttpClient _httpClient;
-    private AsyncLazy<ServiceIndex> _lazyServiceIndex;
+    private readonly AsyncLazy<ServiceIndex> _lazyServiceIndex;
 
     internal IndexResource(
         string serviceKey,
@@ -50,18 +50,11 @@ internal class IndexResource
         _lazyServiceIndex = new AsyncLazy<ServiceIndex>(GetEndpointsAsync);
     }
 
-    public async Task<ServiceIndex> GetResourceAsync()
-    {
-        var resource = await _lazyServiceIndex;
-
-        if (resource == ServiceIndex.Empty)
-        {
-            // Re-initialize lazy for next time
-            Interlocked.Exchange(ref _lazyServiceIndex, new AsyncLazy<ServiceIndex>(GetEndpointsAsync));
-        }
-
-        return resource;
-    }
+    /// <summary>
+    /// Gets the index resource.
+    /// </summary>
+    /// <returns>A <see cref="Task{TResult}"/> that completes with the service index.</returns>
+    public async Task<ServiceIndex> GetResourceAsync() => await _lazyServiceIndex;
 
     private async Task<ServiceIndex> GetEndpointsAsync()
     {

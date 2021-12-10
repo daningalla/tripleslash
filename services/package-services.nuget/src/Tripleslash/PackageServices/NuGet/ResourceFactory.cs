@@ -27,6 +27,7 @@ public class ResourceFactory
     private readonly NuGetOptions _options;
     private readonly HttpClient _httpClient;
     private readonly ILoggerFactory? _loggerFactory;
+    private readonly ILogger? _logger;
     private readonly IndexResource _indexResource;
 
     internal ResourceFactory(string key, 
@@ -38,6 +39,7 @@ public class ResourceFactory
         _options = options;
         _httpClient = httpClient;
         _loggerFactory = loggerFactory;
+        _logger = loggerFactory?.CreateLogger<ResourceFactory>();
         _indexResource = new IndexResource(key, 
             options, 
             httpClient, 
@@ -59,12 +61,17 @@ public class ResourceFactory
                 serviceIndex.Version == "3.0.0"
                 && svc.Type == "SearchQueryService");
 
-        if (searchQueryEntry == null)
+        if (searchQueryEntry != null)
         {
-            var message = $"Search functionality is not currently available (type={typeof(NuGetPackageService)}, provider={_key}))";
-            throw new NotImplementedException(message);
+            _logger?.LogDebug("Matched search resource {SearchResource}", searchQueryEntry);
+        
+            return new SearchResource(_httpClient, 
+                searchQueryEntry.ResourceId, 
+                _loggerFactory?.CreateLogger<SearchResource>());
         }
 
-        return new SearchResource(_httpClient, searchQueryEntry.ResourceId, _loggerFactory?.CreateLogger<SearchResource>());
+        var message = $"Search functionality is not currently available (type={typeof(NuGetPackageService)}, provider={_key}))";
+        
+        throw new NotImplementedException(message);
     }
 }

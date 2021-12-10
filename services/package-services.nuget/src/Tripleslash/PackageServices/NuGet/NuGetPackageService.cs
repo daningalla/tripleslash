@@ -40,7 +40,7 @@ public class NuGetPackageService : IPackageSearchService
         _logger = loggerFactory?.CreateLogger<NuGetPackageService>();
         _resourceFactory = new ResourceFactory(key, options, httpClient, loggerFactory);
         
-        SourceId = options.SourceId!;
+        SourceId = key;
         Description = options.Description ?? "NuGet service provider";
 
         if (string.IsNullOrWhiteSpace(SourceId))

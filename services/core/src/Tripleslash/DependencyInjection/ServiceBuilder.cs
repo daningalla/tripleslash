@@ -13,36 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-namespace Tripleslash.PackageServices.NuGet;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Tripleslash.DependencyInjection;
 
 /// <summary>
-/// Defines options used to connect to NuGet.
+/// Represents an object used to build application services of a specific type.
 /// </summary>
-public class NuGetOptions
+public class ServiceBuilder<TService>
 {
     /// <summary>
-    /// Gets or sets the source id.
+    /// Creates a new instance of this type.
     /// </summary>
-    public string? SourceId { get; set; }
-    
+    /// <param name="applicationServices">Applications services.</param>
+    public ServiceBuilder(IServiceCollection applicationServices)
+    {
+        ApplicationServices = applicationServices;
+    }
+
     /// <summary>
-    /// Gets or sets the service description.
+    /// Gets the application's service collection.
     /// </summary>
-    public string? Description { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the service index url.
-    /// </summary>
-    public string? ServiceIndexUrl { get; set; }
-    
-    /// <summary>
-    /// Gets or sets the authorization type.
-    /// </summary>
-    public string? AuthorizationType { get; set; }
-    
-    /// <summary>
-    /// Gets or sets a dictionary of secrets used to connect to the nuget server
-    /// (depends on authorization type).
-    /// </summary>
-    public IDictionary<string, string>? Secrets { get; set; }
+    public IServiceCollection ApplicationServices { get; }
 }

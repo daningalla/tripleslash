@@ -605,5 +605,3 @@ __pycache__/
 
 .build/test
 .build/packages
-
-.DS_Store

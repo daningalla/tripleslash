@@ -1,31 +1,35 @@
-﻿// Copyright 2022 Tripleslash contributors
-//
+// Copyright 2022 Tripleslash contributors
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-//
+// 
 //   http://www.apache.org/licenses/LICENSE-2.0
-//
+// 
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-namespace Tripleslash.Core;
+namespace Tripleslash.Core.PackageServices;
 
 /// <summary>
-/// Defines the supported ecosystem monikers.
+/// Defines how a dependency version is enforced.
 /// </summary>
-public enum Ecosystem
+public enum VersionConstraint
 {
     /// <summary>
-    /// No ecosystem.
+    /// Indicates that the version must be exact.
     /// </summary>
-    None,
+    Exact,
     
     /// <summary>
-    /// Defines the <c>dotnet</c> ecosystem of packages. 
+    /// Indicates that the version is inclusive.
     /// </summary>
-    Dotnet = 1
+    Inclusive,
+    
+    /// <summary>
+    /// Indicates that the version is exclusive.
+    /// </summary>
+    Exclusive
 }

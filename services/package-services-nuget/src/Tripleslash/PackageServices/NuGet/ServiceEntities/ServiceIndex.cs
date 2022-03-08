@@ -49,3 +49,50 @@ public class ServiceIndex
 	[JsonPropertyName("@context")]
 	public RootContext? Context { get; set; }
 }
+
+/// <summmary>
+///   Represents a structural entity in the source JSON document.
+///   Path: /resources/$(item)
+/// </summmary>
+public class RootResourcesItem
+{
+	/// <summmary>
+	///   Gets or sets the '@id' value.
+	/// </summmary>
+	/// <remarks>
+	///   Path: /resources/$(item)/@id
+	///   Sample value: 'https://azuresearch-usnc.nuget.org/query'
+	/// </remarks>
+	[JsonPropertyName("@id")]
+	public string? Id { get; set; } = string.Empty;
+	
+	/// <summmary>
+	///   Gets or sets the '@type' value.
+	/// </summmary>
+	/// <remarks>
+	///   Path: /resources/$(item)/@type
+	///   Sample value: 'SearchQueryService'
+	/// </remarks>
+	[JsonPropertyName("@type")]
+	public string? Type { get; set; } = string.Empty;
+	
+	/// <summmary>
+	///   Gets or sets the 'comment' value.
+	/// </summmary>
+	/// <remarks>
+	///   Path: /resources/$(item)/comment
+	///   Sample value: 'Query endpoint of NuGet Search service (primary)'
+	/// </remarks>
+	[JsonPropertyName("comment")]
+	public string? Comment { get; set; } = string.Empty;
+	
+	/// <summmary>
+	///   Gets or sets the 'clientVersion' value.
+	/// </summmary>
+	/// <remarks>
+	///   Path: /resources/$(item)/clientVersion
+	///   Sample value: '4.3.0-alpha'
+	/// </remarks>
+	[JsonPropertyName("clientVersion")]
+	public string? ClientVersion { get; set; } = string.Empty;
+}

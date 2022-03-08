@@ -22,60 +22,34 @@ public static class ServiceCollectionExtensions
     /// </summary>
     /// <param name="serviceCollection">Service collection</param>
     /// <param name="key">Service key</param>
-    /// <param name="implementationFactory">Implementation factory</param>
     /// <typeparam name="TService">Service type</typeparam>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddKeyedTransient<TService>(
+    public static KeyedServiceRegistrationBuilder<TService> AddKeyedTransient<TService>(
         this IServiceCollection serviceCollection,
-        string key,
-        Func<IServiceProvider, TService> implementationFactory)
-        where TService: class => serviceCollection.AddKeyedService(key, implementationFactory, ServiceLifetime.Transient);
+        string key)
+        where TService : class => new(serviceCollection, key, ServiceLifetime.Transient);
     
     /// <summary>
-    /// Adds a keyed service to the service collection with a <see cref="ServiceLifetime.Scoped"/> lifetime.
+    /// Adds a keyed service to the service collection with a <see cref="ServiceLifetime.Transient"/> lifetime.
     /// </summary>
     /// <param name="serviceCollection">Service collection</param>
     /// <param name="key">Service key</param>
-    /// <param name="implementationFactory">Implementation factory</param>
     /// <typeparam name="TService">Service type</typeparam>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddKeyedScoped<TService>(
+    public static KeyedServiceRegistrationBuilder<TService> AddKeyedScoped<TService>(
         this IServiceCollection serviceCollection,
-        string key,
-        Func<IServiceProvider, TService> implementationFactory)
-        where TService: class => serviceCollection.AddKeyedService(key, implementationFactory, ServiceLifetime.Scoped);
+        string key)
+        where TService : class => new(serviceCollection, key, ServiceLifetime.Scoped);
     
     /// <summary>
-    /// Adds a keyed service to the service collection with a <see cref="ServiceLifetime.Singleton"/> lifetime.
+    /// Adds a keyed service to the service collection with a <see cref="ServiceLifetime.Transient"/> lifetime.
     /// </summary>
     /// <param name="serviceCollection">Service collection</param>
     /// <param name="key">Service key</param>
-    /// <param name="implementationFactory">Implementation factory</param>
     /// <typeparam name="TService">Service type</typeparam>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddKeyedSingleton<TService>(
+    public static KeyedServiceRegistrationBuilder<TService> AddKeyedSingleton<TService>(
         this IServiceCollection serviceCollection,
-        string key,
-        Func<IServiceProvider, TService> implementationFactory)
-        where TService: class => serviceCollection.AddKeyedService(key, implementationFactory, ServiceLifetime.Singleton);
-    
-    private static IServiceCollection AddKeyedService<TService>(
-        this IServiceCollection serviceCollection,
-        string key,
-        Func<IServiceProvider, TService> implementationFactory,
-        ServiceLifetime serviceLifetime)
-        where TService : class
-    {
-        serviceCollection.Add(ServiceDescriptor.Describe(
-            typeof(KeyedService<TService>),
-            provider => new KeyedService<TService>(key, implementationFactory(provider)),
-            serviceLifetime));
-
-        serviceCollection.Add(ServiceDescriptor.Describe(
-            typeof(TService),
-            provider => provider.GetServices<KeyedService<TService>>().First(ks => ks.Key == key).Service,
-            serviceLifetime));
-
-        return serviceCollection;
-    }
+        string key)
+        where TService : class => new(serviceCollection, key, ServiceLifetime.Singleton);
 }

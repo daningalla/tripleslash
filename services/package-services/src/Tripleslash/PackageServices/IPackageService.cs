@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Tripleslash.Core;
+using Tripleslash.Core.PackageServices;
 
 namespace Tripleslash.PackageServices;
 
@@ -31,4 +32,20 @@ public interface IPackageService
     /// <param name="ecosystem">Ecosystem</param>
     /// <returns><c>true</c> if the ecosystem is supported, <c>false</c> otherwise.</returns>
     bool IsEcosystemSupported(Ecosystem ecosystem);
+
+    /// <summary>
+    /// Searches a term.
+    /// </summary>
+    /// <param name="term">Full or partial term to search</param>
+    /// <param name="page">Zero-based page index</param>
+    /// <param name="size">Maximum number of results per page</param>
+    /// <param name="prerelease">Whether to include pre-release/unstable packages</param>
+    /// <param name="cancellationToken">Token that can be observed for cancellation requests</param>
+    /// <returns>Task</returns>
+    Task<IReadOnlyCollection<PackageMetadata>> SearchAsync(
+        string term, 
+        int page, 
+        int size,
+        bool prerelease,
+        CancellationToken cancellationToken);
 }

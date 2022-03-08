@@ -11,9 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Tripleslash.Core.DependencyInjection;
 using Tripleslash.PackageServices;
 using Tripleslash.PackageServices.NuGet;
@@ -36,20 +36,28 @@ public static class ServiceCollectionExtensions
     {
         serviceCollection.AddPackageServices();
 
-        var httpClientKey = $"{key}{Guid.NewGuid().ToString("N")[..8]}";
+        serviceCollection.AddHttpClient(key);
 
-        serviceCollection.AddHttpClient(httpClientKey, httpClient =>
-        {
-            // TODO: Configure auth headers
-        });
+        serviceCollection.AddMemoryCache();
 
-        serviceCollection.Configure(key, configureAction);
-        
-        serviceCollection.AddKeyedSingleton<IPackageService>(key, provider => new NuGetPackageService(
-            provider.GetRequiredService<IOptionsSnapshot<NuGetConfiguration>>().Get(key),
-            () => provider.GetRequiredService<IHttpClientFactory>().CreateClient(httpClientKey),
-            provider.GetRequiredService<ILogger<NuGetPackageService>>()));
+        serviceCollection.AddKeyedSingleton<NuGetPackageService>(key)
+            .Configure(configureAction)
+            .PostConfigure<NuGetConfiguration>(ValidateConfiguration)
+            .Factory(provider => new NuGetPackageService(
+                provider.GetKeyedOptions<NuGetPackageService, NuGetConfiguration>(key),
+                () => provider.GetRequiredService<IHttpClientFactory>().CreateClient(key),
+                provider.GetService<IMemoryCache>(),
+                provider.GetService<ILoggerFactory>()))
+            .Decorate<IPackageService>();
 
         return serviceCollection;
+    }
+
+    private static void ValidateConfiguration(NuGetConfiguration obj)
+    {
+        if (obj.ServiceIndexUri == null)
+        {
+            throw new InvalidOperationException("Missing required NuGet configuration value 'ServiceIndexUri'");
+        }
     }
 }

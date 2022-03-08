@@ -19,13 +19,24 @@ namespace Tripleslash.Core.DependencyInjection;
 /// <typeparam name="T">Service type</typeparam>
 public class KeyedService<T>
 {
-    public string Key { get; }
-    public T Service { get; }
-
+    /// <summary>
+    /// Creates a new instance of this type.
+    /// </summary>
+    /// <param name="key">Key</param>
+    /// <param name="service">Service implementation</param>
     public KeyedService(string key, T service)
     {
         Key = key;
         Service = service;
-
     }
+
+    /// <summary>
+    /// Gets the service key
+    /// </summary>
+    public string Key { get; }
+
+    /// <summary>
+    /// Gets the service implementation
+    /// </summary>
+    public T Service { get; }
 }

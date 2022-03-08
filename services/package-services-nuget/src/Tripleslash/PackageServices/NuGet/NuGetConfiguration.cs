@@ -21,15 +21,15 @@ public class NuGetConfiguration
     /// <summary>
     /// Gets a description of the service.
     /// </summary>
-    public string? Description { get; init; }
+    public string? Description { get; set; }
     
     /// <summary>
     /// Gets or sets the service index URI for the NuGet repository.
     /// </summary>
-    public Uri ServiceIndexUri { get; init; } = default!;
-    
+    public Uri ServiceIndexUri { get; set; } = default!;
+
     /// <summary>
-    /// Gets or sets the API access token/secret.
+    /// Gets or sets an array of search resources.
     /// </summary>
-    public string? ApiSecret { get; init; }
+    public string[]? SearchResources { get; } = { "SearchQueryService" };
 }

@@ -11,8 +11,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Tripleslash.Core;
+using Tripleslash.Core.PackageServices;
 
 namespace Tripleslash.PackageServices.NuGet;
 
@@ -20,16 +22,19 @@ public class NuGetPackageService : IPackageService
 {
     private readonly NuGetConfiguration _configuration;
     private readonly Func<HttpClient> _httpClientFactory;
-    private readonly ILogger<NuGetPackageService>? _logger;
+    private readonly IMemoryCache? _memoryCache;
+    private readonly ILoggerFactory? _loggerFactory;
 
     public NuGetPackageService(
         NuGetConfiguration configuration,
         Func<HttpClient> httpClientFactory,
-        ILogger<NuGetPackageService>? logger = null)
+        IMemoryCache? memoryCache = null,
+        ILoggerFactory? loggerFactory = null)
     {
         _configuration = configuration;
         _httpClientFactory = httpClientFactory;
-        _logger = logger;
+        _memoryCache = memoryCache;
+        _loggerFactory = loggerFactory;
     }
 
     /// <inheritdoc />
@@ -37,4 +42,15 @@ public class NuGetPackageService : IPackageService
 
     /// <inheritdoc />
     public bool IsEcosystemSupported(Ecosystem ecosystem) => ecosystem == Ecosystem.Dotnet;
+
+    /// <inheritdoc />
+    public Task<IReadOnlyCollection<PackageMetadata>> SearchAsync(
+        string term, 
+        int page, 
+        int size, 
+        bool prerelease,
+        CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
 }

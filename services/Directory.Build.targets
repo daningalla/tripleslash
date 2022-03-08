@@ -17,5 +17,6 @@
         <PackageReference Update="Polly" Version="7.2.2" />
         <PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0" />
         <PackageReference Update="xunit" Version="2.4.1" />
+        <PackageReference Update="Shouldly" Version="4.0.3" />
     </ItemGroup>
 </Project>

@@ -58,6 +58,26 @@ public class PackageMetadata
     /// Gets the repository type.
     /// </summary>
     public RepositoryType RepositoryType { get; init; }
+    
+    /// <summary>
+    /// Gets the package description.
+    /// </summary>
+    public string? Description { get; init; }
+    
+    /// <summary>
+    /// Gets the package icon url.
+    /// </summary>
+    public string? IconUrl { get; init; }
+    
+    /// <summary>
+    /// Gets package tags.
+    /// </summary>
+    public string[]? Tags { get; init; }
+    
+    /// <summary>
+    /// Gets properties meaningful to the package source.
+    /// </summary>
+    public Dictionary<string, string>? SourceProperties { get; init; }
 
     /// <inheritdoc />
     public override string ToString() => $"[{Ecosystem}] {PackageId}-{Version}";

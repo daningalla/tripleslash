@@ -12,24 +12,36 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using AutoMapper;
 using MediatR;
+using Tripleslash.PackageServices;
 
 namespace Tripleslash.ServiceApi.Features.Search;
 
-public class Handler : IRequestHandler<Request, Response>
+public class Handler : IRequestHandler<Request, ResponseContext>
 {
-    private readonly LinkGenerator _linkGenerator;
+    private readonly IPackageServiceAggregator _packageAggregator;
+    private readonly IMapper _mapper;
 
-    public Handler(LinkGenerator linkGenerator)
+    public Handler(IPackageServiceAggregator packageAggregator, IMapper mapper)
     {
-        _linkGenerator = linkGenerator;
+        _packageAggregator = packageAggregator;
+        _mapper = mapper;
     }
     
     /// <inheritdoc />
-    public Task<Response> Handle(Request request, CancellationToken cancellationToken)
+    public async Task<ResponseContext> Handle(Request request, CancellationToken cancellationToken)
     {
-        var response = new Response(_linkGenerator.GetPathByName("search", values: null)!);
+        var result = await _packageAggregator.SearchAsync(
+            request.Ecosystem,
+            request.Term,
+            request.Page,
+            request.Size,
+            request.PreRelease,
+            cancellationToken);
 
-        return Task.FromResult(response);
+        var response = _mapper.Map<Response>(result);
+
+        return new ResponseContext<Response>(response);
     }
 }

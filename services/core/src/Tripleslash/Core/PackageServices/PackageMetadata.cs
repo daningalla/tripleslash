@@ -20,24 +20,24 @@ namespace Tripleslash.Core.PackageServices;
 public class PackageMetadata
 {
     /// <summary>
-    /// Gets the package ecosystem.
-    /// </summary>
-    public Ecosystem Ecosystem { get; init; }
-
-    /// <summary>
-    /// Gets the package source.
+    /// Gets the package source friendly name.
     /// </summary>
     public string PackageSource { get; init; } = default!;
 
     /// <summary>
     /// Gets the package id.
     /// </summary>
-    public string PackageId { get; init; } = default!;
+    public PackageId PackageId { get; init; } = default!;
 
     /// <summary>
-    /// Gets the package version.
+    /// Gets the package title.
     /// </summary>
-    public SemVersion Version { get; init; } = default!;
+    public string? Title { get; init; } = default!;
+
+    /// <summary>
+    /// Gets the package summary.
+    /// </summary>
+    public string? Summary { get; init; } = default!;
 
     /// <summary>
     /// Gets the package authors.
@@ -47,17 +47,22 @@ public class PackageMetadata
     /// <summary>
     /// Gets the project uri.
     /// </summary>
-    public Uri? ProjectUri { get; init; }
+    public string? ProjectUri { get; init; }
     
     /// <summary>
     /// Gets the source repository uri.
     /// </summary>
-    public Uri? RepositoryUri { get; init; }
+    public string? RepositoryUri { get; init; }
     
     /// <summary>
     /// Gets the repository type.
     /// </summary>
-    public RepositoryType RepositoryType { get; init; }
+    public string? RepositoryType { get; init; }
+    
+    /// <summary>
+    /// Gets the license url.
+    /// </summary>
+    public string? LicenseUrl { get; init; }
     
     /// <summary>
     /// Gets the package description.
@@ -75,13 +80,17 @@ public class PackageMetadata
     public string[]? Tags { get; init; }
     
     /// <summary>
+    /// Gets the total download count.
+    /// </summary>
+    public int? TotalDownloads { get; init; }
+    
+    
+    
+    /// <summary>
     /// Gets properties meaningful to the package source.
     /// </summary>
     public Dictionary<string, string>? SourceProperties { get; init; }
 
     /// <inheritdoc />
-    public override string ToString() => $"[{Ecosystem}] {PackageId}-{Version}";
-
-    /// <inheritdoc />
-    public override int GetHashCode() => HashCode.Combine(Ecosystem, PackageId, Version);
+    public override string ToString() => $"{PackageId}";
 }

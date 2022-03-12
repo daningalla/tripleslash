@@ -18,7 +18,7 @@ namespace Tripleslash.ServiceApi.Infrastructure;
 
 public static class RouteExtensions
 {
-    public static void MapRouteDefinitions(this WebApplication app)
+    public static void MapRoutes(this WebApplication app)
     {
         var definitionTypes = typeof(RouteExtensions)
             .Assembly
@@ -27,7 +27,7 @@ public static class RouteExtensions
 
         foreach (var type in definitionTypes)
         {
-            // Performs registration
+            // Performs route registration (once)
             Activator.CreateInstance(type, app);
         }
     }    

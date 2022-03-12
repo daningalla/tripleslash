@@ -12,28 +12,24 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Tripleslash.PackageServices;
+using FluentValidation;
+using Microsoft.Extensions.Options;
+using Tripleslash.ServiceApi.Options;
 
 namespace Tripleslash.ServiceApi.Features.Search;
 
 /// <summary>
-/// Represents the search response.
+/// Validates the request
 /// </summary>
-public class Response
+public class Validator : AbstractValidator<Request>
 {
-    /// <summary>
-    /// Gets the total number of results.
-    /// </summary>
-    public int TotalHits { get; init; }
-    
-    /// <summary>
-    /// Gets the number of provider errors.
-    /// </summary>
-    public int ProviderErrors { get; init; }
-    
-    /// <summary>
-    /// Gets the package search result groups.
-    /// </summary>
-    public IReadOnlyCollection<PackageSearchResultGroup> Groups { get; init; } =
-        Array.Empty<PackageSearchResultGroup>();
+    public Validator(IOptions<SearchOptions> optionsProvider)
+    {
+        var options = optionsProvider.Value;
+        
+        RuleFor(req => req.Ecosystem).IsInEnum();
+        RuleFor(req => req.Page).GreaterThanOrEqualTo(0);
+        RuleFor(req => req.Size).GreaterThanOrEqualTo(0).LessThanOrEqualTo(options.MaxResultSize);
+        RuleFor(req => req.Term).NotNull().NotEmpty().MinimumLength(options.MinTermLength);
+    }
 }

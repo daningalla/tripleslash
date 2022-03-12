@@ -17,28 +17,38 @@ using Microsoft.Extensions.Logging;
 
 namespace Tripleslash.PackageServices.NuGet.Resources;
 
-internal class ResourceFactory
+internal class RequestScope : IDisposable
 {
     private readonly NuGetConfiguration _configuration;
-    private readonly Func<HttpClient> _httpClientFactory;
     private readonly IMemoryCache? _memoryCache;
     private readonly ILoggerFactory? _loggerFactory;
+    private readonly HttpClient _httpClient;
 
-    internal ResourceFactory(
+    internal RequestScope(
         NuGetConfiguration configuration,
-        Func<HttpClient> httpClientFactory,
+        HttpClient httpClient,
         IMemoryCache? memoryCache = null,
         ILoggerFactory? loggerFactory = null)
     {
         _configuration = configuration;
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClient;
         _memoryCache = memoryCache;
         _loggerFactory = loggerFactory;
     }
 
+    public void Dispose() => _httpClient.Dispose();
+
     internal ServiceIndexResource GetServiceIndexResource() => new(
         _configuration,
-        _httpClientFactory,
+        _httpClient,
         _memoryCache,
         _loggerFactory);
+
+    internal async Task<SearchResource> GetSearchResourceAsync(CancellationToken cancellationToken)
+    {
+        var serviceIndexResource = GetServiceIndexResource();
+        var serviceIndex = await serviceIndexResource.GetResourceAsync(cancellationToken);
+
+        return new SearchResource(_configuration, serviceIndex, _httpClient, _loggerFactory);
+    }
 }

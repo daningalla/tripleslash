@@ -11,7 +11,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Dawn;
 using Microsoft.Extensions.Caching.Memory;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Tripleslash.Core.DependencyInjection;
@@ -26,25 +28,62 @@ public static class ServiceCollectionExtensions
     /// Adds NuGet package services to the service collection.
     /// </summary>
     /// <param name="serviceCollection">Service collection</param>
+    /// <param name="configuration">
+    /// A configuration section that contains one or more NuGet service configurations.
+    /// </param>
+    /// <returns><see cref="IServiceCollection"/></returns>
+    public static IServiceCollection AddNuGetPackageServices(
+        this IServiceCollection serviceCollection,
+        IConfiguration configuration)
+    {
+        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        Guard.Argument(configuration, nameof(configuration)).NotNull();
+
+        var configDictionary = new Dictionary<string, NuGetConfiguration>();
+        configuration.Bind(configDictionary);
+
+        foreach (var (key, config) in configDictionary)
+        {
+            serviceCollection.AddNuGetPackageService(key, target =>
+            {
+                target.Description = config.Description;
+                target.ServiceIndexUrl = config.ServiceIndexUrl;
+                target.ProviderKey = key;
+            });
+        }
+
+        return serviceCollection;
+    }
+    
+    /// <summary>
+    /// Adds NuGet package services to the service collection.
+    /// </summary>
+    /// <param name="serviceCollection">Service collection</param>
     /// <param name="key">A unique key for the provider.</param>
     /// <param name="configureAction">A delegate used to customize the NuGet configuration.</param>
     /// <returns><see cref="IServiceCollection"/></returns>
-    public static IServiceCollection AddNuGetPackageServices(
+    public static IServiceCollection AddNuGetPackageService(
         this IServiceCollection serviceCollection,
         string key,
         Action<NuGetConfiguration> configureAction)
     {
+        Guard.Argument(serviceCollection, nameof(serviceCollection)).NotNull();
+        Guard.Argument(key, nameof(key)).NotNull().NotWhiteSpace();
+        Guard.Argument(configureAction, nameof(configureAction)).NotNull();
+
         serviceCollection.AddPackageServices();
 
         serviceCollection.AddHttpClient(key);
 
         serviceCollection.AddMemoryCache();
 
-        serviceCollection.AddKeyedSingleton<NuGetPackageService>(key)
-            .Configure(configureAction)
-            .PostConfigure<NuGetConfiguration>(ValidateConfiguration)
+        serviceCollection.Configure(key, configureAction);
+
+        serviceCollection.PostConfigure<NuGetConfiguration>(options => ValidateConfiguration(key, options));
+
+        serviceCollection.AddKeyedScoped<NuGetPackageService>(key)
             .Factory(provider => new NuGetPackageService(
-                provider.GetKeyedOptions<NuGetPackageService, NuGetConfiguration>(key),
+                provider.GetKeyedOptions<NuGetConfiguration>(key),
                 () => provider.GetRequiredService<IHttpClientFactory>().CreateClient(key),
                 provider.GetService<IMemoryCache>(),
                 provider.GetService<ILoggerFactory>()))
@@ -53,11 +92,13 @@ public static class ServiceCollectionExtensions
         return serviceCollection;
     }
 
-    private static void ValidateConfiguration(NuGetConfiguration obj)
+    private static void ValidateConfiguration(string key, NuGetConfiguration obj)
     {
-        if (obj.ServiceIndexUri == null)
+        if (obj.ServiceIndexUrl == null)
         {
             throw new InvalidOperationException("Missing required NuGet configuration value 'ServiceIndexUri'");
         }
+
+        obj.ProviderKey = key;
     }
 }

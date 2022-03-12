@@ -40,10 +40,9 @@ public static class ServiceProviderExtensions
     /// </summary>
     /// <param name="serviceProvider">Service provider</param>
     /// <param name="key">Service key</param>
-    /// <typeparam name="TService">Service type</typeparam>
     /// <typeparam name="TOptions">Options type</typeparam>
     /// <returns><see cref="TOptions"/> instance</returns>
-    public static TOptions GetKeyedOptions<TService, TOptions>(this IServiceProvider serviceProvider, string key)
+    public static TOptions GetKeyedOptions<TOptions>(this IServiceProvider serviceProvider, string key)
         where TOptions : class
     {
         return serviceProvider

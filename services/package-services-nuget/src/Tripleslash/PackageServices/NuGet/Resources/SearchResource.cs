@@ -12,6 +12,9 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System.Diagnostics.CodeAnalysis;
+using System.Net.Http.Json;
+using Dawn;
 using Microsoft.Extensions.Logging;
 using Tripleslash.PackageServices.NuGet.ServiceEntities;
 
@@ -19,23 +22,26 @@ namespace Tripleslash.PackageServices.NuGet.Resources;
 
 internal class SearchResource
 {
+    private const string SearchResourceType = "SearchQueryService";
+    
     private readonly NuGetConfiguration _configuration;
-    private readonly ServiceIndexResource _serviceIndexResource;
-    private readonly Func<HttpClient> _httpClientFactory;
+    private readonly ServiceIndex _serviceIndex;
+    private readonly HttpClient _httpClient;
     private readonly ILogger? _logger;
 
     internal SearchResource(
         NuGetConfiguration configuration,
-        ServiceIndexResource serviceIndexResource,
-        Func<HttpClient> httpClientFactory,
+        ServiceIndex serviceIndex,
+        HttpClient httpClient,
         ILoggerFactory? loggerFactory)
     {
         _configuration = configuration;
-        _serviceIndexResource = serviceIndexResource;
-        _httpClientFactory = httpClientFactory;
+        _serviceIndex = serviceIndex;
+        _httpClient = httpClient;
         _logger = loggerFactory?.CreateLogger<SearchResource>();
     }
 
+    [SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
     internal async Task<SearchResultRoot> GetResourceResultAsync(
         string term,
         int page,
@@ -43,31 +49,51 @@ internal class SearchResource
         bool prerelease,
         CancellationToken cancellationToken)
     {
-        var serviceIndex = await _serviceIndexResource.GetResourceAsync(cancellationToken);
-        var searchUris = GetSearchResources(serviceIndex);
+        Guard.Argument(term, nameof(term)).NotNull().NotWhiteSpace();
+        Guard.Argument(page, nameof(page)).GreaterThan(-1);
+        Guard.Argument(size, nameof(size)).GreaterThan(0);
 
-        return null;
-    }
+        var searchUris = GetSearchResources();
 
-    private IEnumerable<string> GetSearchResources(ServiceIndex serviceIndex)
-    {
-        if ((_configuration.SearchResources?.Length ?? 0) == 0)
+        foreach (var uri in searchUris)
         {
-            var msg = $"NuGet package service '{_configuration.ServiceIndexUri}' does not define any search " +
-                      "resources in configuration.";
-
-            throw new NotSupportedException(msg);
+            try
+            {
+                _logger?.LogDebug("Executing package search (resource={Resource}, term={Term})",
+                    uri,
+                    term);
+                
+                var request = $"{uri}?q={term}&skip={page * size}&take={size}&prerelease={prerelease}";
+                var result = await _httpClient.GetFromJsonAsync<SearchResultRoot>(request, cancellationToken);
+                
+                if (result != null)
+                {
+                    _logger?.LogTrace("Received search result (count={ResultCount})", result.Data?.Length);
+                    return result;
+                }
+            }
+            catch (Exception exception)
+            {
+                _logger?.LogWarning(exception, "An error was caught during Http request processing");
+            }
         }
 
-        var configuredResources = _configuration.SearchResources!;
-        var matchedResources = serviceIndex
+        var msg = $"Could not obtain a result from search services (provider='{_configuration.ProviderKey}'). " +
+                  $"The following resources were tried: [{string.Join(",", searchUris)}]";
+        
+        throw new InvalidOperationException(msg);
+    }
+
+    private IEnumerable<string> GetSearchResources()
+    {
+        var matchedResources = _serviceIndex
             .Resources?
-            .Where(resource => configuredResources.Any(conf => conf == resource.Type))
+            .Where(resource => resource.Type == SearchResourceType)
             .ToArray();
 
         if ((matchedResources?.Length ?? 0) == 0)
         {
-            var msg = $"NuGet package service '{_configuration.ServiceIndexUri}' does not have any compatible " +
+            var msg = $"NuGet package service '{_configuration.ProviderKey}' does not have any compatible " +
                       "search resources that match configured values";
 
             throw new NotSupportedException(msg);

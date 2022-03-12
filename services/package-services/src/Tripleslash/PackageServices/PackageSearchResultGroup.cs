@@ -12,38 +12,37 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using MediatR;
-using Tripleslash.Core;
+using Tripleslash.Core.PackageServices;
 
-namespace Tripleslash.ServiceApi.Features.Search;
+namespace Tripleslash.PackageServices;
 
 /// <summary>
-/// Defines the search request.
+/// Defines a group of search results.
 /// </summary>
-public class Request : IRequest<ResponseContext>
+public class PackageSearchResultGroup
 {
     /// <summary>
-    /// Gets the ecosystem filter.
+    /// Gets the provider key.
     /// </summary>
-    public Ecosystem Ecosystem { get; set; } = default!;
+    public string ProviderKey { get; init; } = default!;
+    
+    /// <summary>
+    /// Gets the number of results produced by the provider.
+    /// </summary>
+    public int Hits { get; init; }
+    
+    /// <summary>
+    /// Gets whether the search for this provider faulted.
+    /// </summary>
+    public bool Faulted { get; init; }
+    
+    /// <summary>
+    /// If faulted, provides a description of the error that occurred.
+    /// </summary>
+    public string? Error { get; init; }
 
     /// <summary>
-    /// Gets the search term.
+    /// Gets the results of this provider.
     /// </summary>
-    public string Term { get; set; } = default!;
-    
-    /// <summary>
-    /// Gets the page id for pagination.
-    /// </summary>
-    public int Page { get; set; }
-    
-    /// <summary>
-    /// Gets the maximum number of results to return.
-    /// </summary>
-    public int Size { get; set; }
-    
-    /// <summary>
-    /// Gets whether to include prerelease/unstable packages in results.
-    /// </summary>
-    public bool PreRelease { get; set; }
+    public IReadOnlyCollection<PackageMetadata> Results { get; init; } = Array.Empty<PackageMetadata>();
 }

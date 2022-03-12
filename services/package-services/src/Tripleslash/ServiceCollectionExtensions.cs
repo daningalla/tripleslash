@@ -12,6 +12,7 @@
 // limitations under the License.
 
 using Microsoft.Extensions.DependencyInjection;
+using Tripleslash.PackageServices;
 
 namespace Tripleslash;
 
@@ -24,6 +25,8 @@ public static class ServiceCollectionExtensions
     /// <returns><see cref="IServiceCollection"/></returns>
     public static IServiceCollection AddPackageServices(this IServiceCollection serviceCollection)
     {
+        serviceCollection.AddScoped<IPackageServiceAggregator, PackageServiceAggregator>();
+        
         return serviceCollection;
     }
 }

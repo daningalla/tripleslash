@@ -12,29 +12,30 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Tripleslash.Core.PackageServices;
+using Tripleslash.Core;
 
 namespace Tripleslash.PackageServices;
 
 /// <summary>
-/// Aggregates search results across multiple package services.
+/// Represents a service that aggregates package operations from multiple
+/// package sources.
 /// </summary>
-public interface IPackageSearchAggregator
+public interface IPackageServiceAggregator
 {
     /// <summary>
-    /// Searches a term.
+    /// Searches the registered package services for metadata matching a term.
     /// </summary>
-    /// <param name="ecosystem">Ecosystem to search</param>
-    /// <param name="term">Full or partial term to search</param>
-    /// <param name="page">Zero-based page index</param>
-    /// <param name="size">Maximum number of results per page</param>
-    /// <param name="prerelease">Whether to include pre-release/unstable packages</param>
+    /// <param name="ecosystem">Ecosystem</param>
+    /// <param name="term">Search term</param>
+    /// <param name="page">Page index</param>
+    /// <param name="size">Maximum number of results to show per provider</param>
+    /// <param name="prerelease">Whether to include prerelease/unstable packages in the results</param>
     /// <param name="cancellationToken">Token that can be observed for cancellation requests</param>
-    /// <returns>Task</returns>
-    Task<IReadOnlyCollection<PackageMetadata>> SearchAsync(
-        string ecosystem, 
-        string term, 
-        int page, 
+    /// <returns>A task that completes with a <see cref="PackageSearchResult"/> object</returns>
+    Task<PackageSearchResult> SearchAsync(
+        Ecosystem ecosystem,
+        string term,
+        int page,
         int size,
         bool prerelease,
         CancellationToken cancellationToken);

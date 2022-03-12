@@ -15,9 +15,14 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Tripleslash.Core;
 using Tripleslash.Core.PackageServices;
+using Tripleslash.PackageServices.NuGet.Mappers;
+using Tripleslash.PackageServices.NuGet.Resources;
 
 namespace Tripleslash.PackageServices.NuGet;
 
+/// <summary>
+/// Implements <see cref="IPackageService"/> using a NuGet service.
+/// </summary>
 public class NuGetPackageService : IPackageService
 {
     private readonly NuGetConfiguration _configuration;
@@ -25,6 +30,13 @@ public class NuGetPackageService : IPackageService
     private readonly IMemoryCache? _memoryCache;
     private readonly ILoggerFactory? _loggerFactory;
 
+    /// <summary>
+    /// Creates a new instance of this type
+    /// </summary>
+    /// <param name="configuration">NuGet configuration</param>
+    /// <param name="httpClientFactory">Function that provides <see cref="HttpContent"/></param>
+    /// <param name="memoryCache">Optional configured memory cache</param>
+    /// <param name="loggerFactory">Logger factory</param>
     public NuGetPackageService(
         NuGetConfiguration configuration,
         Func<HttpClient> httpClientFactory,
@@ -38,19 +50,39 @@ public class NuGetPackageService : IPackageService
     }
 
     /// <inheritdoc />
+    public string ProviderKey => _configuration.ProviderKey;
+
+    /// <inheritdoc />
     public string Description => _configuration.Description ?? "NuGet repository";
 
     /// <inheritdoc />
     public bool IsEcosystemSupported(Ecosystem ecosystem) => ecosystem == Ecosystem.Dotnet;
 
     /// <inheritdoc />
-    public Task<IReadOnlyCollection<PackageMetadata>> SearchAsync(
+    public async Task<IReadOnlyCollection<PackageMetadata>> SearchAsync(
         string term, 
         int page, 
         int size, 
         bool prerelease,
         CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        using var requestScope = new RequestScope(
+            _configuration,
+            _httpClientFactory(),
+            _memoryCache,
+            _loggerFactory);
+
+        var searchResource = await requestScope.GetSearchResourceAsync(cancellationToken);
+        var result = await searchResource.GetResourceResultAsync(
+            term,
+            page,
+            size,
+            prerelease,
+            cancellationToken);
+
+        return result
+            .Data?
+            .Select(item => item.AsPackageMetadata(_configuration))
+            .ToArray() ?? Array.Empty<PackageMetadata>();
     }
 }

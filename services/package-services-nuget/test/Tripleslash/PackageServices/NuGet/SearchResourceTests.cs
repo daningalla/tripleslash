@@ -12,8 +12,6 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,21 +21,22 @@ using Xunit;
 
 namespace Tripleslash.PackageServices.NuGet;
 
-public class ServiceIndexResourceTests
+public class SearchResourceTests
 {
     [Fact, Trait("Category", "Integration")]
-    public async Task GetResourceReturnsServiceIndex()
+    public async Task SearchReturnsResultsWithoutError()
     {
-        using var httpClient = new HttpClient();
-        
-        var testInstance = new ServiceIndexResource(new NuGetConfiguration
-        {
-            ServiceIndexUrl = "https://api.nuget.org/v3/index.json",
-            Description = "nuget.org"
-        }, httpClient);
+        using var resourceFactory = new RequestScope(
+            new NuGetConfiguration
+            {
+                ProviderKey = "nuget.org",
+                ServiceIndexUrl = "https://api.nuget.org/v3/index.json"
+            },
+            new HttpClient());
 
-        var index = await testInstance.GetResourceAsync(CancellationToken.None);
+        var searchResource = await resourceFactory.GetSearchResourceAsync(CancellationToken.None);
+        var result = await searchResource.GetResourceResultAsync("serilog", 0, 10, false, CancellationToken.None);
 
-        index.Resources?.Any(res => res.Type == "SearchQueryService").ShouldBeTrue();
+        result.ShouldNotBeNull();
     }
 }

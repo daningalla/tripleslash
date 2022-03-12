@@ -12,15 +12,15 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-namespace Tripleslash.ServiceApi.Shared;
+using AutoMapper;
+using Tripleslash.PackageServices;
 
-/// <summary>
-/// Base class for hyper-media responses.
-/// </summary>
-public abstract class HypermediaResponse
+namespace Tripleslash.ServiceApi.Features.Search;
+
+public class Maps : Profile
 {
-    /// <summary>
-    /// Gets the media links.
-    /// </summary>
-    public IReadOnlyCollection<HypermediaLink>? Links { get; init; }
+    public Maps()
+    {
+        CreateMap<PackageSearchResult, Response>();
+    }
 }

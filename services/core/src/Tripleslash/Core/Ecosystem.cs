@@ -20,11 +20,6 @@ namespace Tripleslash.Core;
 public enum Ecosystem
 {
     /// <summary>
-    /// No ecosystem.
-    /// </summary>
-    None,
-    
-    /// <summary>
     /// Defines the <c>dotnet</c> ecosystem of packages. 
     /// </summary>
     Dotnet = 1

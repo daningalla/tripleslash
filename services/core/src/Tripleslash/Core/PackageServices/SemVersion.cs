@@ -14,6 +14,8 @@
 
 using System.Buffers;
 using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Dawn;
 using Tripleslash.Core.Utilities;
@@ -23,8 +25,25 @@ namespace Tripleslash.Core.PackageServices;
 /// <summary>
 /// Represents an immutable semantic version (implements https://semver.org/ 2.0 spec)
 /// </summary>
+[JsonConverter(typeof(MyJsonConverter))]
 public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
 {
+    internal class MyJsonConverter : JsonConverter<SemVersion>
+    {
+        /// <inheritdoc />
+        public override SemVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var serialized = reader.GetString();
+            return serialized != null ? Parse(serialized) : null;
+        }
+
+        /// <inheritdoc />
+        public override void Write(Utf8JsonWriter writer, SemVersion value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToString());
+        }
+    }
+    
     /// <summary>
     /// Gets the default version (1.0.0).
     /// </summary>

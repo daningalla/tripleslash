@@ -12,32 +12,16 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System;
-using System.Linq;
-using System.Net.Http;
-using System.Threading;
 using System.Threading.Tasks;
-using Shouldly;
-using Tripleslash.PackageServices.NuGet.Resources;
 using Xunit;
 
-namespace Tripleslash.PackageServices.NuGet;
+namespace Tripleslash.PackageServices;
 
-public class ServiceIndexResourceTests
+public class PackageServiceAggregatorTests
 {
     [Fact, Trait("Category", "Integration")]
-    public async Task GetResourceReturnsServiceIndex()
+    public async Task SearchProvidesFormattedResults()
     {
-        using var httpClient = new HttpClient();
         
-        var testInstance = new ServiceIndexResource(new NuGetConfiguration
-        {
-            ServiceIndexUrl = "https://api.nuget.org/v3/index.json",
-            Description = "nuget.org"
-        }, httpClient);
-
-        var index = await testInstance.GetResourceAsync(CancellationToken.None);
-
-        index.Resources?.Any(res => res.Type == "SearchQueryService").ShouldBeTrue();
     }
 }

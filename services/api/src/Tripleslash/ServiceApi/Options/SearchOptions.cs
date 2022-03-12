@@ -12,28 +12,25 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Tripleslash.PackageServices;
-
-namespace Tripleslash.ServiceApi.Features.Search;
+namespace Tripleslash.ServiceApi.Options;
 
 /// <summary>
-/// Represents the search response.
+/// Defines search options
 /// </summary>
-public class Response
+public class SearchOptions
 {
     /// <summary>
-    /// Gets the total number of results.
+    /// Gets or sets the default result size.
     /// </summary>
-    public int TotalHits { get; init; }
-    
+    public int DefaultResultSize { get; set; } = 25;
+
     /// <summary>
-    /// Gets the number of provider errors.
+    /// Gets or sets the maximum number of results that can be requested in search.
     /// </summary>
-    public int ProviderErrors { get; init; }
-    
+    public int MaxResultSize { get; set; } = 50;
+
     /// <summary>
-    /// Gets the package search result groups.
+    /// Gets or sets the minimum search term length.
     /// </summary>
-    public IReadOnlyCollection<PackageSearchResultGroup> Groups { get; init; } =
-        Array.Empty<PackageSearchResultGroup>();
+    public int MinTermLength { get; set; } = 3;
 }

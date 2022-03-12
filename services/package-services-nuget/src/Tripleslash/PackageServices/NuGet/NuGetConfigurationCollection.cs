@@ -12,28 +12,15 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using Tripleslash.PackageServices;
-
-namespace Tripleslash.ServiceApi.Features.Search;
+namespace Tripleslash.PackageServices.NuGet;
 
 /// <summary>
-/// Represents the search response.
+/// Defines options for a collection of NuGet service configurations.
 /// </summary>
-public class Response
+public class NuGetConfigurationCollection
 {
     /// <summary>
-    /// Gets the total number of results.
+    /// Gets or sets the NuGet services.
     /// </summary>
-    public int TotalHits { get; init; }
-    
-    /// <summary>
-    /// Gets the number of provider errors.
-    /// </summary>
-    public int ProviderErrors { get; init; }
-    
-    /// <summary>
-    /// Gets the package search result groups.
-    /// </summary>
-    public IReadOnlyCollection<PackageSearchResultGroup> Groups { get; init; } =
-        Array.Empty<PackageSearchResultGroup>();
+    public IReadOnlyCollection<NuGetConfiguration> Services { get; set; } = Array.Empty<NuGetConfiguration>();
 }

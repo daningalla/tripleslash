@@ -22,6 +22,11 @@ namespace Tripleslash.PackageServices;
 public interface IPackageService
 {
     /// <summary>
+    /// Gets the service provider key.
+    /// </summary>
+    string ProviderKey { get; }
+    
+    /// <summary>
     /// Gets a description of the package service.
     /// </summary>
     string Description { get; }

@@ -1,4 +1,3 @@
-using MediatR;
 using Tripleslash.ServiceApi.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,9 +6,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 var services = builder.Services;
 
-services.AddEndpointsApiExplorer();
-services.AddSwaggerGen();
-services.AddMediatR(typeof(Program));
+services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddTripleslashServices(builder.Configuration)
+    .AddLogging();
 
 var app = builder.Build();
 
@@ -20,9 +21,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-var mediatr = app.Services.GetRequiredService<IMediator>();
-
 app.UseHttpsRedirection();
-app.MapRouteDefinitions();
+app.MapRoutes();
 
 app.Run();

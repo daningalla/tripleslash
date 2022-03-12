@@ -12,35 +12,26 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
-using System.Text.Json.Serialization;
-using Dawn;
-
-namespace Tripleslash.ServiceApi.Shared;
+namespace Tripleslash.PackageServices;
 
 /// <summary>
-/// Describes a hypermedia link.
+/// Represents an aggregated search result.
 /// </summary>
-public class HypermediaLink
+public class PackageSearchResult
 {
     /// <summary>
-    /// Creates a new instance of this type.
+    /// Gets the total number of results.
     /// </summary>
-    /// <param name="id">Link resource id</param>
-    /// <param name="relation">Relation type</param>
-    public HypermediaLink(string id, string relation)
-    {
-        Id = Guard.Argument(id, nameof(id)).NotNull().NotWhiteSpace();
-        Relation = Guard.Argument(relation, nameof(relation)).NotNull().NotWhiteSpace();
-    }
+    public int TotalHits { get; init; }
     
     /// <summary>
-    /// Gets the link id.
+    /// Gets the number of provider errors.
     /// </summary>
-    public string Id { get; }
+    public int ProviderErrors { get; init; }
     
     /// <summary>
-    /// Gets the relation.
+    /// Gets the package search result groups.
     /// </summary>
-    [JsonPropertyName("rel")]
-    public string Relation { get; }
+    public IReadOnlyCollection<PackageSearchResultGroup> Groups { get; init; } =
+        Array.Empty<PackageSearchResultGroup>();
 }

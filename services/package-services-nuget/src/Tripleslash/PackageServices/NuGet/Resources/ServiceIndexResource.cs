@@ -22,19 +22,19 @@ namespace Tripleslash.PackageServices.NuGet.Resources;
 internal sealed class ServiceIndexResource
 {
     private readonly NuGetConfiguration _configuration;
-    private readonly Func<HttpClient> _httpClientFactory;
+    private readonly HttpClient _httpClient;
     private readonly IMemoryCache? _memoryCache;
     private readonly ILogger? _logger;
     private readonly string _cachedIndexKey = $"serviceIndex__{Guid.NewGuid():N}";
 
     internal ServiceIndexResource(
         NuGetConfiguration configuration,
-        Func<HttpClient> httpClientFactory,
+        HttpClient httpClient,
         IMemoryCache? memoryCache = null,
         ILoggerFactory? loggerFactory = null)
     {
         _configuration = configuration;
-        _httpClientFactory = httpClientFactory;
+        _httpClient = httpClient;
         _memoryCache = memoryCache;
         _logger = loggerFactory?.CreateLogger<ServiceIndexResource>();
     }
@@ -47,11 +47,9 @@ internal sealed class ServiceIndexResource
             return (ServiceIndex)cachedIndex;
         }
 
-        using var httpClient = _httpClientFactory();
-
-        var uri = _configuration.ServiceIndexUri;
+        var uri = _configuration.ServiceIndexUrl;
         
-        var index = await httpClient.GetFromJsonAsync<ServiceIndex>(
+        var index = await _httpClient.GetFromJsonAsync<ServiceIndex>(
             uri,
             cancellationToken);
 

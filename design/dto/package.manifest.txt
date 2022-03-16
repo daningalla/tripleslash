@@ -1,0 +1,4 @@
+[alg:sha-1]
+serilog.core.logleveloverride:32e2ab99fb6ae54dfa51ca1a0a790cdf8762e3b3
+serilog.core.ilogeventenricher:f43d67348ddff9ce37d6d899314b3cf1ee975acb
+...

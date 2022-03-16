@@ -1,0 +1,94 @@
+{
+    "schema": "1.0.0",
+    "links": {
+        "source": "<url>",
+        "packageContent": "<url>",
+        "home": "<url>",
+        "license": "<url>",
+        "toc": "<url>"
+    },
+    "title": "Article Title",
+    "crumbs": [
+        {
+            "displayOrder": 0,
+            "item": "Docs",
+            "url": "<url>"
+        }
+    ],
+    "sections": [
+        {
+            "title": "Namespaces",
+            "type": "list",
+            "items": [
+                {
+                    "type": "class",
+                    "item": "Constants",
+                    "content": "<description>"
+                }
+            ]
+        },
+        {
+            "title": "Overview",
+            "type": "paragraph",
+            "content": "<section content>",
+            "sections": [
+                {
+                    "title": "Inheritance",
+                    "type": "hierarchy",
+                    "items": [
+                        {
+                            "type": "class",
+                            "item": "Object",
+                            "href": "<url>"
+                        },
+                        {
+                            "type": "class",
+                            "item": "LoggingLevelSwitch"
+                        }
+                    ]
+                },
+                {
+                    "title": "Interfaces",
+                    "type": "type-list",
+                    "items": [
+                        {
+                            "type": "interface",
+                            "item": "IDisposable",
+                            "href": "<url>"
+                        }
+                    ]
+                },
+                {
+                    "title": "Declaration",
+                    "type": "code",
+                    "lang": "csharp",
+                    "langDisplay": "C#",
+                    "content": "<code>"
+                }
+            ]
+        },
+        {
+            "title": "Classes",
+            "type": "list",
+            "itemDescriptor": "Class",
+            "items": [
+                {
+                    "type": "class",
+                    "item": "LevelOverrideMap"
+                }
+            ]
+        }
+    ],
+    "compatibilityMatrix": {
+        "groups": [
+            ".NETFramework4.5",
+            ".NETFramework4.6",
+            ".NETStandard1.0",
+            ".NETStandard1.3",
+            ".NETStandard1.6",
+            ".NETStandard2.0"
+        ],
+        "versions": ["4.5","4.5.1","4.5.2","4.6","4.6.1"],
+        "matrix": [3928819920,133299388,10293884400,199388822]
+    }
+}

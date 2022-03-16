@@ -1,0 +1,70 @@
+{
+    "schema": "1.0.0",
+    "package": {
+        "eco": "dotnet",
+        "id": "<package-id>",
+        "version": {
+            "id": "2.11.0",
+            "preRelease": false
+        }
+    },
+    "metadata": {        
+    },
+    "links": {
+        "source": "<url>",
+        "packageContent": "<url>",
+        "home": "<url>",
+        "license": "<url>"
+    },
+    "version": [
+        {
+            "id": "2.11.0-dev-01380",
+            "preRelease": true,
+            "indexStatus": "<url>",
+            "indexProgress": 0.75
+        },
+        {
+            "id": "2.11.0-dev-01377",
+            "preRelease": true
+        }
+    ],
+    "dependencyGroups": [
+        {
+            "id": ".NETStandard1.0",
+            "items": [
+                {
+                    "id": "NETStandard.Library",
+                    "range": ">= 1.6.1"
+                }
+            ]
+        }
+    ],
+    "compatibilityGroups": [
+        {
+            "id": ".NETFramework",
+            "versions": [ "4.5","4.5.1","4.5.2","4.6.1" ]
+        },
+        {
+            "id": ".NETCoreApp",
+            "versions": [ "1.0", "1.1", "2.0", "2.1", "3.0", "3.1" ]
+        }
+    ],
+    "compatibilityMatrix": {
+        "groups": [
+            ".NETFramework4.5",
+            ".NETFramework4.6",
+            ".NETStandard1.0",
+            ".NETStandard1.3",
+            ".NETStandard1.6",
+            ".NETStandard2.0"
+        ],
+        "versions": ["4.5","4.5.1","4.5.2","4.6","4.6.1"]
+    },
+    "searchIndex": [
+        {
+            "type": "<namespace|class|struct|delegate|enum>",
+            "term": "<term>",
+            "doc": "<url>"
+        }
+    ]
+} 

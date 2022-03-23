@@ -14,6 +14,7 @@
 
 using FluentValidation;
 using Microsoft.Extensions.Options;
+using Tripleslash.Core;
 using Tripleslash.ServiceApi.Options;
 
 namespace Tripleslash.ServiceApi.Features.Search;
@@ -26,8 +27,8 @@ public class Validator : AbstractValidator<Request>
     public Validator(IOptions<SearchOptions> optionsProvider)
     {
         var options = optionsProvider.Value;
-        
-        RuleFor(req => req.Ecosystem).IsInEnum();
+
+        RuleFor(req => req.Ecosystem).Must(str => Ecosystem.TryParse(str, out _));
         RuleFor(req => req.Page).GreaterThanOrEqualTo(0);
         RuleFor(req => req.Size).GreaterThanOrEqualTo(0).LessThanOrEqualTo(options.MaxResultSize);
         RuleFor(req => req.Term).NotNull().NotEmpty().MinimumLength(options.MinTermLength);

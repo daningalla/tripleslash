@@ -22,7 +22,7 @@ public class NuGetConfiguration
     /// Gets or sets the service key.
     /// </summary>
     public string ProviderKey { get; set; } = default!;
-    
+
     /// <summary>
     /// Gets a description of the service.
     /// </summary>

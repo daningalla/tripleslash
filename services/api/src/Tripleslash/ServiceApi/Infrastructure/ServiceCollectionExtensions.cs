@@ -12,10 +12,11 @@
 //  See the License for the specific language governing permissions and
 //  limitations under the License.
 
+using System.Text.Json.Serialization;
 using Dawn;
 using FluentValidation;
 using MediatR;
-using Tripleslash.ServiceApi.Mediator;
+using Microsoft.AspNetCore.Http.Json;
 using Tripleslash.ServiceApi.Options;
 
 namespace Tripleslash.ServiceApi.Infrastructure;
@@ -42,6 +43,12 @@ public static class ServiceCollectionExtensions
 
         // Tripleslash services
         serviceCollection.AddNuGetPackageServices(configuration.GetSection("PackageServices:nuget"));
+        
+        // Configure serialization
+        serviceCollection.Configure<JsonOptions>(opt => opt
+            .SerializerOptions
+            .Converters
+            .Add(new JsonStringEnumConverter()));
 
         return serviceCollection;
     }

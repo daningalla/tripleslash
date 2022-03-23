@@ -14,6 +14,7 @@
 
 using AutoMapper;
 using MediatR;
+using Tripleslash.Core;
 using Tripleslash.PackageServices;
 
 namespace Tripleslash.ServiceApi.Features.Search;
@@ -33,7 +34,7 @@ public class Handler : IRequestHandler<Request, ResponseContext>
     public async Task<ResponseContext> Handle(Request request, CancellationToken cancellationToken)
     {
         var result = await _packageAggregator.SearchAsync(
-            request.Ecosystem,
+            Ecosystem.Parse(request.Ecosystem), 
             request.Term,
             request.Page,
             request.Size,

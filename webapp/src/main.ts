@@ -1,11 +1,11 @@
 import { createApp } from "vue";
-import { initializeTheme } from "./services/theme";
-import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 import App from "./App.vue";
 import router from "./router";
-
-initializeTheme();
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
 const app = createApp(App);
+
+app.use(router);
 app.component("font-awesome-icon", FontAwesomeIcon);
-app.use(router).mount("#app");
+
+app.mount("#app");

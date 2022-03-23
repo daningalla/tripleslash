@@ -15,7 +15,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Tripleslash.Core;
 using Tripleslash.ServiceApi.Infrastructure;
 using Tripleslash.ServiceApi.Options;
 
@@ -34,7 +33,7 @@ public class Route : RouteDefinition
         app.MapGet("/search", async (
                 [FromServices] IMediator mediator,
                 [FromServices] IOptions<SearchOptions> optionsProvider,
-                [FromQuery(Name = "eco")] Ecosystem ecosystem,
+                [FromQuery(Name = "eco")] string ecosystem,
                 [FromQuery(Name = "term")] string term,
                 [FromQuery(Name = "pg")] int? page,
                 [FromQuery(Name = "sz")] int? size,

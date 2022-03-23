@@ -25,7 +25,7 @@ public class Request : IRequest<ResponseContext>
     /// <summary>
     /// Gets the ecosystem filter.
     /// </summary>
-    public Ecosystem Ecosystem { get; set; } = default!;
+    public string Ecosystem { get; set; } = default!;
 
     /// <summary>
     /// Gets the search term.

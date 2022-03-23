@@ -1,0 +1,16 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+.flex-across { display: flex; }
+.flex-down {
+    display: flex;
+    flex-direction: column;
+}
+.flex-grow { flex-grow: 1; }
+.align-content-center { align-content: center; }
+.align-items-center { align-items: center; }
+.justify-content-center { justify-content: center; }
+.justify-items-center { justify-items: center; }
+.justify-space-between { justify-content: space-between; }

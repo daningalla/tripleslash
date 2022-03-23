@@ -25,11 +25,20 @@ namespace Tripleslash.Core.PackageServices;
 /// <summary>
 /// Represents an immutable semantic version (implements https://semver.org/ 2.0 spec)
 /// </summary>
-[JsonConverter(typeof(MyJsonConverter))]
+[JsonConverter(typeof(JsonConverter))]
 public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
 {
-    internal class MyJsonConverter : JsonConverter<SemVersion>
+    /// <summary>
+    /// Defines a JsonConverter for this type.
+    /// </summary>
+    public class JsonConverter : JsonConverter<SemVersion>
     {
+        /// <summary>
+        /// Gets a default instance of this type.
+        /// </summary>
+        // ReSharper disable once MemberHidesStaticFromOuterClass
+        public static readonly JsonConverter<SemVersion> Default = new JsonConverter();
+        
         /// <inheritdoc />
         public override SemVersion? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
@@ -47,7 +56,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
     /// <summary>
     /// Gets the default version (1.0.0).
     /// </summary>
-    public static readonly SemVersion Default = new(1, 0, 0);
+    public static readonly SemVersion Default = new(1, 0);
     
     /// <summary>
     /// Creates a new instance of this type.

@@ -1,0 +1,14 @@
+body[data-theme="dark"] {
+    --theme-background: #111111;
+    --theme-background-header: #333333;
+    --theme-background-header-hover: #444444;
+    --theme-background-search: #0E4861;
+    --theme-background-search-alt: #0d4259;
+    --theme-search-text: #cccccc;
+    --theme-foreground: #DDDDDD;
+}
+
+body {
+    background-color: var(--theme-background);
+    color: var(--theme-foreground);
+}

@@ -31,6 +31,9 @@ public class PackageService : IPackageService
     public string ProviderKey { get; set; } = default!;
 
     /// <inheritdoc />
+    public string DisplayName { get; set; } = default!;
+
+    /// <inheritdoc />
     public string Description { get; set; } = default!;
 
     public PackageMetadata[] Packages { get; set; } = Array.Empty<PackageMetadata>();

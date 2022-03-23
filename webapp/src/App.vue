@@ -1,5 +1,9 @@
 <script setup lang="ts">
-import LayoutRoot from "./shared/LayoutRoot.vue";
+import { themeService } from "@/services/theme";
+import { onMounted } from "vue";
+import LayoutRoot from "@/layout/LayoutRoot.vue";
+
+onMounted(() => themeService.initialize());
 </script>
 
 <template>
@@ -7,5 +11,6 @@ import LayoutRoot from "./shared/LayoutRoot.vue";
 </template>
 
 <style>
-@import "./assets/stylesheets/style.css";
+@import "./assets/layout.css";
+@import "assets/styles.css";
 </style>

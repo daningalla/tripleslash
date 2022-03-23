@@ -1,5 +1,7 @@
 using Tripleslash.ServiceApi.Infrastructure;
 
+const string CorsPolicy = "_localhostCorsPolicy";
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -8,9 +10,15 @@ var services = builder.Services;
 
 services
     .AddEndpointsApiExplorer()
-    .AddSwaggerGen()
+    .AddSwaggerGen(options => options.CustomSchemaIds(type => type.ToString()))
     .AddTripleslashServices(builder.Configuration)
-    .AddLogging();
+    .AddLogging()
+    .AddCors(options => options.AddPolicy(
+        CorsPolicy,
+        policy => policy
+            .WithOrigins("http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()));
 
 var app = builder.Build();
 
@@ -22,6 +30,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors(CorsPolicy);
 app.MapRoutes();
 
 app.Run();

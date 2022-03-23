@@ -1,0 +1,14 @@
+:root {
+    /* fonts */
+    --font-sz-normal: 10pt;        
+    --font-sz-sm: 9pt;
+    --font-sz-ex-sm: 8pt;
+    --font-sz-md: 12pt;
+    --font-sz-lg: 14pt;
+    --font-sz-ex-lg: 16pt;    
+    /* animations */
+    --hover-transition: 0.25s;
+    /* geometry */
+    --border-radius-sm: 2px;
+    --border-radius-lg: 5px;
+}

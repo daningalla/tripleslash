@@ -2,6 +2,7 @@
 :root {
     --ts-transition-delay: 250ms;
     --ts-transition-delay-short: 100ms;
+    --ts-search-width: 1000px;
 }
 
 body[data-theme="dark"]{
@@ -12,9 +13,11 @@ body[data-theme="dark"]{
     --ts-background-header-search: #0E4861;
     /* foreground colors */
     --ts-foreground: #cccccc;
+    --ts-foreground-subtle: #aaaaaa;
     --ts-foreground-search-input: #dddddd;
     /* misc colors */
     --ts-widget-highlight:  #0E4861;
+    --ts-icon-blue: #0070cc;
 }
 
 body {
@@ -27,6 +30,7 @@ body {
 
 /* Font classes */
 .font-ex-small { font-size: 8pt; }
+.font-sm { font-size: 9pt; }
 .font-reg { font-size: 10pt; }
 .font-md { font-size: 12pt; }
 .font-lg { font-size: 14pt; }

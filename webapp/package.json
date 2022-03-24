@@ -10,12 +10,14 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^6.1.0",
+    "@fortawesome/pro-duotone-svg-icons": "^6.1.1",
     "@fortawesome/pro-light-svg-icons": "^6.1.0",
     "@fortawesome/pro-thin-svg-icons": "^6.1.0",
     "@fortawesome/vue-fontawesome": "^3.0.0-5",
     "rxjs": "^7.5.5",
     "vue": "^3.2.31",
-    "vue-router": "^4.0.12"
+    "vue-router": "^4.0.12",
+    "vue-use-popperjs": "^2.3.1"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.0",

@@ -3,6 +3,7 @@ import type { SearchResult } from "@/dto/search";
 import { computed, reactive } from "vue";
 import { TabItem } from "@/core/tab-types";
 import TabHeaderWidget from "@/widgets/TabHeaderWidget.vue";
+import PackageList from "@/views/search/PackageList.vue";
 
 const props = defineProps<{ results: SearchResult }>();
 const tabItems = computed(() => {
@@ -25,7 +26,12 @@ const handleSelectionChanged = (item: TabItem) => {
       :items="tabItems"
       :selectionChanged="handleSelectionChanged"
     />
+    <PackageList class="package-list" :item-group="group.value" />
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+.package-list {
+  margin-top: 16px;
+}
+</style>

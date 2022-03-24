@@ -57,7 +57,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
     /// Gets the default version (1.0.0).
     /// </summary>
     public static readonly SemVersion Default = new(1, 0);
-    
+
     /// <summary>
     /// Creates a new instance of this type.
     /// </summary>
@@ -72,6 +72,17 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
         int patch = 0,
         string? preRelease = null,
         string? metadata = null)
+        : this(major, minor, patch, null, preRelease, metadata)
+    {
+    }
+    
+    private SemVersion(
+        int major,
+        int minor,
+        int patch,
+        int? legacyBuildId,
+        string? preRelease,
+        string? metadata)
     {
         Guard.Argument(major, nameof(major)).GreaterThan(-1);
         Guard.Argument(minor, nameof(minor)).GreaterThan(-1);
@@ -80,6 +91,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
         Major = major;
         Minor = minor;
         Patch = patch;
+        LegacyBuildId = legacyBuildId;
         PreRelease = preRelease.NullIfWhiteSpace();
         Metadata = metadata.NullIfWhiteSpace();
     }
@@ -98,6 +110,11 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
     /// Gets the patch version.
     /// </summary>
     public int Patch { get; }
+    
+    /// <summary>
+    /// Gets the non semver-compliant legacy build id.
+    /// </summary>
+    public int? LegacyBuildId { get; }
 
     /// <summary>
     /// Gets the optional pre-release label.
@@ -128,6 +145,10 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
 
         // Rule 11.1
         if ((result = intComparer.Compare(Patch, other.Patch)) != 0)
+            return result;
+
+        // Unsupported semver...
+        if ((result = intComparer.Compare(LegacyBuildId ?? 0, other.LegacyBuildId ?? 0)) != 0)
             return result;
 
         // Rule 11.3
@@ -239,7 +260,7 @@ public sealed class SemVersion : IComparable<SemVersion>, IEquatable<SemVersion>
         
         var regexMatch = Regex.Match(
             s, 
-            @"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)" 
+            @"^(?<major>0|[1-9]\d*)\.(?<minor>0|[1-9]\d*)\.(?<patch>0|[1-9]\d*)(\.(?<legacyBuild>0|[1-9]\d*))?" 
             + @"(?:-(?<prerelease>(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?"  
             + @"(?:\+(?<buildmetadata>[0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$");
 

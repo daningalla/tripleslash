@@ -70,11 +70,12 @@ public class PackageServiceAggregator : IPackageServiceAggregator
     {
         try
         {
-            var results = await packageService.SearchAsync(term, page, size, prerelease, cancellationToken);
+            var results = await packageService.SearchAsync(term, page, size+1, prerelease, cancellationToken);
             return new PackageSearchResultGroup
             {
                 Hits = results.Count,
-                Results = results,
+                Results = results.Take(size).ToArray(),
+                HasNextPage = results.Count > size,
                 ProviderKey = packageService.ProviderKey
             };
         }

@@ -40,6 +40,11 @@ public class PackageSearchResultGroup
     /// If faulted, provides a description of the error that occurred.
     /// </summary>
     public string? Error { get; init; }
+    
+    /// <summary>
+    /// Gets whether more results are available.
+    /// </summary>
+    public bool HasNextPage { get; init; }
 
     /// <summary>
     /// Gets the results of this provider.

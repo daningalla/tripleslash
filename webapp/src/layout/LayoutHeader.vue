@@ -5,7 +5,7 @@ import { faGear, faArrowRightToBracket } from "@fortawesome/pro-light-svg-icons"
 </script>
 
 <template>
-  <div class="flex-across component justify-space-between">
+  <div class="flex-across header justify-space-between">
     <div>
       <img :src="logo" alt="logo" />
     </div>
@@ -17,8 +17,10 @@ import { faGear, faArrowRightToBracket } from "@fortawesome/pro-light-svg-icons"
 </template>
 
 <style scoped>
-.component {
+.header {
   background-color: var(--ts-background-header);
   height: 76px;
+  position: fixed;
+  width: 100%;
 }
 </style>

@@ -23,6 +23,7 @@ export interface SearchResultGroup {
   faulted: boolean;
   error?: string;
   results: SearchResultItem[];
+  hasNextPage: boolean;
 }
 
 export interface SearchResult {

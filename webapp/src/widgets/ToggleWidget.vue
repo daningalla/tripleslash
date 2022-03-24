@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { faToggleOff, faToggleOn } from "@fortawesome/pro-light-svg-icons";
+import { faToggleOff, faToggleOn } from "@fortawesome/pro-duotone-svg-icons";
 import { computed, defineProps } from "vue";
 
 const props = defineProps<{ label: string; modelValue: boolean }>();

@@ -3,6 +3,10 @@ html, body {
     padding: 0;
 }
 
+html {
+    overflow-y: scroll;
+}
+
 .flex-across { display: flex; }
 .flex-down {
     display: flex;
@@ -14,3 +18,9 @@ html, body {
 .justify-content-center { justify-content: center; }
 .justify-items-center { justify-items: center; }
 .justify-space-between { justify-content: space-between; }
+.margin-left-8 { margin-left: 8px; }
+.margin-left-16 { margin-left: 16px; }
+.margin-left-32 { margin-left: 32px; }
+.no-wrap { white-space: nowrap; }
+.overflow-hidden { overflow: hidden; }
+.text-overflow-ellipses { text-overflow: ellipsis; }
